@@ -35,8 +35,13 @@ public:
 
     }
 
+    template<typename T>
+    std::string format(T&& arg) {
+        return do_format(Counter(), arg);
+    }
+
     template<typename... Args>
-    std::string format(const Args& ... args) {
+    std::string format(Args&& ... args) {
         return do_format(Counter(), args...);
     }
 
@@ -44,7 +49,7 @@ private:
     std::string str_;
 
     template<typename T>
-    std::string do_format(Counter count, T val) {
+    std::string do_format(Counter count, T&& val) {
         std::string to_replace = "{" + std::to_string(count.val) + "}";
 
         std::stringstream ss;
@@ -56,7 +61,7 @@ private:
     }
 
     template<typename T, typename... Args>
-    std::string do_format(Counter count, T val, const Args&... args) {
+    std::string do_format(Counter count, T&& val, Args&&... args) {
         std::string to_replace = "{" + std::to_string(count.val) + "}";
 
         std::stringstream ss;
@@ -64,11 +69,9 @@ private:
 
         std::string result = str_;
         result.replace(result.find(to_replace), to_replace.size(), ss.str());
-        return Formatter(result).format(Counter(count.val + 1), args...);
+        return Formatter(result).do_format(Counter(count.val + 1), args...);
     }
 };
-
-typedef Formatter _F;
 
 class Logger;
 
@@ -183,7 +186,7 @@ private:
 
         std::stringstream s;
         s << std::this_thread::get_id() << ": ";
-        s << text << " (" << file << ":" << _F("{0}").format(line) << ")";
+        s << text << " (" << file << ":" << Formatter("{0}").format(line) << ")";
         for(uint32_t i = 0; i < handlers_.size(); ++i) {
             handlers_[i]->write_message(this, std::chrono::system_clock::now(), level, s.str());
         }
@@ -204,6 +207,8 @@ void warn_once(const std::string& text, const std::string& file="None", int32_t 
 void error(const std::string& text, const std::string& file="None", int32_t line=-1);
 
 }
+
+typedef kazlog::Formatter _F;
 
 #define L_DEBUG(txt) \
     kazlog::debug((txt), __FILE__, __LINE__)
