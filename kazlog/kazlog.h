@@ -10,7 +10,7 @@
 #include <unordered_set>
 #include <unordered_map>
 
-
+#ifndef __clang__
 #if (__GNUC__ == 4 && __GNUC_MINOR__ <= 7)
 
 /* GCC 4.7 doesn't define std::to_string... for some reason, so we just hack around it here */
@@ -39,7 +39,7 @@ std::string to_string(float value) {
 }
 
 #endif
-
+#endif
 
 namespace kazlog {
 
