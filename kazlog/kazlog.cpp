@@ -1,5 +1,6 @@
 #include <unordered_map>
 #include <cassert>
+#include <stdexcept>
 #include "kazlog.h"
 
 #ifdef __ANDROID__
