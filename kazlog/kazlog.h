@@ -24,6 +24,12 @@ std::string to_string(int value) {
     return ss.str();
 }
 
+std::string to_string(uint32_t value) {
+    std::ostringstream ss;
+    ss << value;
+    return ss.str();
+}
+
 std::string to_string(long value) {
     std::ostringstream ss;
     ss << value;
