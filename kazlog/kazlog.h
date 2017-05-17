@@ -10,42 +10,22 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#ifndef __clang__
-#if (__GNUC__ == 4 && __GNUC_MINOR__ <= 7)
 
-/* GCC 4.7 doesn't define std::to_string... for some reason, so we just hack around it here */
-
-
+/* We pre-declare these as GCC 4.7.3 doesn't ship with them, it's assumed that an
+ * implementation will be provided elsewhere for these functions if that's the case
+ */
 namespace std {
-
-std::string to_string(int value) {
-    std::ostringstream ss;
-    ss << value;
-    return ss.str();
+std::string to_string( int value );
+std::string to_string( long value );
+std::string to_string( long long value );
+std::string to_string( unsigned value );
+std::string to_string( unsigned long value );
+std::string to_string( unsigned long long value );
+std::string to_string( float value );
+std::string to_string( double value );
+std::string to_string( long double value );
 }
 
-std::string to_string(uint32_t value) {
-    std::ostringstream ss;
-    ss << value;
-    return ss.str();
-}
-
-std::string to_string(long value) {
-    std::ostringstream ss;
-    ss << value;
-    return ss.str();
-}
-
-std::string to_string(float value) {
-    std::ostringstream ss;
-    ss << value;
-    return ss.str();
-}
-
-}
-
-#endif
-#endif
 
 namespace kazlog {
 
