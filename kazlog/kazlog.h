@@ -14,6 +14,9 @@
 /* We pre-declare these as GCC 4.7.3 doesn't ship with them, it's assumed that an
  * implementation will be provided elsewhere for these functions if that's the case
  */
+#ifndef __clang__
+#if (__GNUC__ == 4 && __GNUC_MINOR__ <= 7)
+
 namespace std {
 std::string to_string( int value );
 std::string to_string( long value );
@@ -26,6 +29,8 @@ std::string to_string( double value );
 std::string to_string( long double value );
 }
 
+#endif
+#endif
 
 namespace kazlog {
 
