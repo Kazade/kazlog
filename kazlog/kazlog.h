@@ -72,25 +72,36 @@ private:
 
     template<typename T>
     std::string do_format(Counter count, T&& val) {
+        //std::cout << "Formatting: " << count.val << " -> " << val << std::endl;
         std::string to_replace = "{" + std::to_string(count.val) + "}";
 
         std::stringstream ss;
         ss << val;
 
         std::string result = str_;
+        auto pos = result.find(to_replace);
+        if(pos != std::string::npos) {
+            return result.replace(pos, to_replace.size(), ss.str());
+        } else {
+            return result;
+        }
 
-        return result.replace(result.find(to_replace), to_replace.size(), ss.str());
     }
 
     template<typename T, typename... Args>
     std::string do_format(Counter count, T&& val, Args&&... args) {
+        //std::cout << "Formatting: " << count.val << " -> " << val << std::endl;
+
         std::string to_replace = "{" + std::to_string(count.val) + "}";
 
         std::stringstream ss;
         ss << val;
 
         std::string result = str_;
-        result.replace(result.find(to_replace), to_replace.size(), ss.str());
+        auto pos = result.find(to_replace);
+        if(pos != std::string::npos) {
+            result.replace(pos, to_replace.size(), ss.str());
+        }
         return Formatter(result).do_format(Counter(count.val + 1), args...);
     }
 };
