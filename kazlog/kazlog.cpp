@@ -54,13 +54,13 @@ void StdIOHandler::do_write_message(Logger* logger,
 #ifndef __ANDROID__
             std::cerr << to_string(time) << " ERROR " << message << std::endl;
 #else
-            __android_log_write(ANDROID_LOG_ERROR, "KGLT", message.encode().c_str());
+            __android_log_write(ANDROID_LOG_ERROR, "SIMULANT", message.c_str());
 #endif
         } else {
 #ifndef __ANDROID__
             std::cout << to_string(time) << " " << level << " " << message << std::endl;
 #else
-            __android_log_write(ANDROID_LOG_INFO, "KGLT", message.encode().c_str());
+            __android_log_write(ANDROID_LOG_INFO, "SIMULANT", message.c_str());
 #endif
         }
 }
