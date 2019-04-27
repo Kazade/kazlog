@@ -85,8 +85,9 @@ void error(const std::string& text, const std::string& file, int32_t line) {
     get_logger("/")->error(text, file, line);
 }
 
+static Logger root("/");
+
 Logger* get_logger(const std::string& name) {
-    static Logger root("/");
     static std::unordered_map<std::string, Logger::ptr> loggers_;
 
     if(name.empty() || name == "/") {
