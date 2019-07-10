@@ -15,7 +15,7 @@
  * implementation will be provided elsewhere for these functions if that's the case
  */
 #ifndef __clang__
-#if (__GNUC__ == 4 && __GNUC_MINOR__ <= 7)
+#ifndef _GLIBCXX_USE_C99_STDIO
 
 namespace std {
 std::string to_string( int value );
@@ -151,6 +151,8 @@ private:
 class Logger {
 public:
     typedef std::shared_ptr<Logger> ptr;
+
+    /* WARNING: Do not add a destructor - it won't get called! */
 
     Logger(const std::string& name):
         name_(name),

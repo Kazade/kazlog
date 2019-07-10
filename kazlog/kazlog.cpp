@@ -85,18 +85,21 @@ void error(const std::string& text, const std::string& file, int32_t line) {
     get_logger("/")->error(text, file, line);
 }
 
-static Logger root("/");
 
 Logger* get_logger(const std::string& name) {
-    static std::unordered_map<std::string, Logger::ptr> loggers_;
+    typedef std::unordered_map<std::string, Logger::ptr> LoggerMap;
+
+    /* Static deinitialization hack, destructors won't get called! */
+    static Logger* root = new Logger("/");
+    static LoggerMap* loggers_ = new LoggerMap();
 
     if(name.empty() || name == "/") {
-        return &root;
+        return root;
     } else {
-        if(loggers_.find(name) == loggers_.end()) {
-            loggers_[name].reset(new Logger(name));
+        if(loggers_->find(name) == loggers_->end()) {
+            loggers_->insert(std::make_pair(name, std::make_shared<Logger>(name)));
         }
-        return loggers_[name].get();
+        return loggers_->at(name).get();
     }
 }
 
